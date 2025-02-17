@@ -6,20 +6,32 @@
     <title>Image Annotation Tool</title>
     <style>
         body {
-            display: flex; /* Set body as a flex container */
-    margin: 0;
-    padding: 0;
-    height: 100vh; /* Full height */
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    background-image: url('https://wallpapercat.com/w/full/4/2/a/1635-1920x1080-desktop-full-hd-hitman-game-background-photo.jpg');
-    background-size: cover;
-    background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            background-image: url('https://wallpapercat.com/w/full/4/2/a/1635-1920x1080-desktop-full-hd-hitman-game-background-photo.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            width: 1200px;
+            height: 650px;
+            border: 2px solid #000; /* Thin border */
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         #welcomeContainer {
             text-align: center;
-            background: rgba(255, 255, 255, 0.5); /* Slightly transparent white */
+            background: rgba(255, 255, 255, 0.5);
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -52,24 +64,22 @@
         }
 
         #controls {
-            width: 20%; /* Restrict to 20% of the screen width */
-    height: 100%; /* Full height */
-    overflow-y: auto; /* Add scroll if content overflows */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Align items to the left */
-    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
-    padding: 20px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow to separate */
-    border-right: 1px solid #ddd; /* Separator between controls and content */
+            width: 20%;
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            border-right: 1px solid #ddd;
         }
 
         .control-group {
             margin: 0px;
         }
- label {
-        color: white; /* Change label color to white */
-    }
+
         label {
             margin-right: 5px;
         }
@@ -82,15 +92,14 @@
         }
 
         #imageWrapper {
-            width: 80%; /* Occupy 80% of the screen */
-    height: 100%; /* Full height */
-    overflow: auto; /* Allow scrolling if content is larger than the area */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff; /* White background for better contrast */
-    border-left: 1px solid #ddd; /* Separator between controls and content */
-
+            width: 80%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            border-left: 1px solid #ddd;
         }
 
         #imageWrapper:hover {
@@ -98,18 +107,15 @@
         }
 
         #imageContainer {
-            width: 100%; /* Fill the wrapper */
-    height: 100%; /* Fill the wrapper */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         #uploadedImage {
-            max-width: 100%; 
-            max-height: 150%; 
-            position: absolute; 
+            max-width: 100%;
+            max-height: 100%;
             transition: transform 0.3s;
         }
 
@@ -118,7 +124,7 @@
             border-radius: 50%;
             display: flex;
             align-items: center;
-            font-weight: bold; /* Add this line */
+            font-weight: bold;
             justify-content: center;
             text-align: center;
             color: black;
@@ -131,12 +137,12 @@
 
         .button-group {
             display: flex;
-    flex-direction: column; /* Stack buttons vertically */
-    gap: 10px; /* Add space between buttons */
-           }
+            flex-direction: column;
+            gap: 10px;
+        }
 
         .button-group button {
-            width: 150px; /* Set a fixed width for buttons */
+            width: 150px;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -144,51 +150,54 @@
 </head>
 <body>
 
-    <div id="welcomeContainer">
-        <h1>Welcome to Mr. Annotator</h1>
-        <p>by Vivek Murthy</p>
-        <button id="getStarted">GET STARTED</button>
-    </div>
-    
-    <div id="controls" style="display: none;">
-        <div class="control-group">
-            <input type="file" id="imageUpload" accept="image/*, application/pdf">
+    <div class="container">
+        <div id="welcomeContainer">
+            <h1>Welcome to Mr. Annotator</h1>
+            <p>by Vivek Murthy</p>
+            <button id="getStarted">GET STARTED</button>
         </div>
-        <div class="control-group">
-            <label for="circleColor">Circle Color:</label>
-            <input type="color" id="circleColor" value="#FF0000">
-            <label for="fontColor">Font Color:</label>
-            <input type="color" id="fontColor" value="#000000">
-        </div>
-        <div class="control-group">
-            <label for="startNumberInput">Start Number:</label>
-            <input type="number" id="startNumberInput" min="1" value="1" style="width: 60px;">
-            <label for="borderThicknessInput">Border Thickness:</label>
-            <input type="number" id="borderThicknessInput" min="0.2" max="5" step="0.1" value="0.2">
-            <label for="circleSizeInput">Circle Size:</label>
-            <input type="number" id="circleSizeInput" min="10" max="100" value="10">
-            <label for="fontSizeInput">Font Size:</label>
-            <input type="number" id="fontSizeInput" min="10" max="100" value="8">
-        </div>
-        <div class="control-group">
-            <label for="horizontalTrackbar">Move Horizontally:</label>
-            <input type="range" id="horizontalTrackbar" min="-500" max="500" value="0">
-            <label for="verticalTrackbar">Move Vertically:</label>
-            <input type="range" id="verticalTrackbar" min="-500" max="500" value="0">
-        </div>
-<div class="button-group">
-    <button id="undoCircle">Undo</button>
-    <button id="zoomIn">Zoom In</button>
-    <button id="zoomOut">Zoom Out</button>
-    <button id="clearCircles">Clear Circles</button>
-    <button id="downloadImage">Download Image</button>
-</div>
-
-    </div>
-    
-    <div id="imageWrapper" style="display: none;">
-        <div id="imageContainer">
-            <img id="uploadedImage" src="" alt="Uploaded Image">
+        
+        <div style="display: flex; flex: 1;">
+            <div id="controls" style="display: none;">
+                <div class="control-group">
+                    <input type="file" id="imageUpload" accept="image/*, application/pdf">
+                </div>
+                <div class="control-group">
+                    <label for="circleColor">Circle Color:</label>
+                    <input type="color" id="circleColor" value="#FF0000">
+                    <label for="fontColor">Font Color:</label>
+                    <input type="color" id="fontColor" value="#000000">
+                </div>
+                <div class="control-group">
+                    <label for="startNumberInput">Start Number:</label>
+                    <input type="number" id="startNumberInput" min="1" value="1" style="width: 60px;">
+                    <label for="borderThicknessInput">Border Thickness:</label>
+                    <input type="number" id="borderThicknessInput" min="0.2" max="5" step="0.1" value="0.2">
+                    <label for="circleSizeInput">Circle Size:</label>
+                    <input type="number" id="circleSizeInput" min="10" max="100" value="10">
+                    <label for="fontSizeInput">Font Size:</label>
+                    <input type="number" id="fontSizeInput" min="10" max="100" value="8">
+                </div>
+                <div class="control-group">
+                    <label for="horizontalTrackbar">Move Horizontally:</label>
+                    <input type="range" id="horizontalTrackbar" min="-500" max="500" value="0">
+                    <label for="verticalTrackbar">Move Vertically:</label>
+                    <input type="range" id="verticalTrackbar" min="-500" max="500" value="0">
+                </div>
+                <div class="button-group">
+                    <button id="undoCircle">Undo</button>
+                    <button id="zoomIn">Zoom In</button>
+                    <button id="zoomOut">Zoom Out</button>
+                    <button id="clearCircles">Clear Circles</button>
+                    <button id="downloadImage">Download Image</button>
+                </div>
+            </div>
+            
+            <div id="imageWrapper" style="display: none;">
+                <div id="imageContainer">
+                    <img id="uploadedImage" src="" alt="Uploaded Image">
+                </div>
+            </div>
         </div>
     </div>
     
@@ -196,306 +205,297 @@
     
     <script>
         $(document).ready(function() {
-        let counter = parseInt($('#startNumberInput').val(), 10); // Start from specified number
-        let circles = [];
-        let isDragging = false;
-        let dragCircle = null;
-        let offset = { x: 0, y: 0 };
-        let originalImageWidth, originalImageHeight; // To store original image dimensions
-        let zoomLevel = 1; // Initialize zoom level
+            let counter = parseInt($('#startNumberInput').val(), 10);
+            let circles = [];
+            let isDragging = false;
+            let dragCircle = null;
+            let offset = { x: 0, y: 0 };
+            let originalImageWidth, originalImageHeight;
+            let zoomLevel = 1;
 
-        $('#getStarted').on('click', function() {
-            $('#welcomeContainer').fadeOut(500, function() {
-                $('#controls').fadeIn(500);
-                $('#imageWrapper').fadeIn(500);
+            $('#getStarted').on('click', function() {
+                $('#welcomeContainer').fadeOut(500, function() {
+                    $('#controls').fadeIn(500);
+                    $('#imageWrapper').fadeIn(500);
+                });
             });
-        });
-$('#undoCircle').on('click', function() {
-    undoLastCircle();
-});
 
-$('#zoomIn').on('click', function() {
-    zoomIn();
-});
+            $('#undoCircle').on('click', function() {
+                undoLastCircle();
+            });
 
-$('#zoomOut').on('click', function() {
-    zoomOut();
-});
+            $('#zoomIn').on('click', function() {
+                zoomIn();
+            });
 
-        $('#imageUpload').on('change', function(event) {
-            // Clear existing circles when a new image is uploaded
-            clearCircles();
+            $('#zoomOut').on('click', function() {
+                zoomOut();
+            });
 
-            const file = event.target.files[0];
-            if (file) {
-                if (file.type === 'application/pdf') {
-                    const fileReader = new FileReader();
-                    fileReader.onload = function() {
-                        const typedarray = new Uint8Array(this.result);
-                        pdfjsLib.getDocument(typedarray).promise.then(pdf => {
-                            pdf.getPage(1).then(page => {
-                                const scale = 2; // Increase scale for better resolution
-                                const viewport = page.getViewport({ scale: scale });
-                                const canvas = document.createElement('canvas');
-                                const context = canvas.getContext('2d');
-                                canvas.height = viewport.height;
-                                canvas.width = viewport.width;
-
-                                const renderContext = {
-                                    canvasContext: context,
-                                    viewport: viewport
-                                };
-                                page.render(renderContext).promise.then(() => {
-                                    const imgURL = canvas.toDataURL();
-                                    $('#uploadedImage').attr('src', imgURL).on('load', function() {
-                                        originalImageWidth = img.width;  // Store original image dimensions
-                                        originalImageHeight = img.height;
-                                        fitImageToContainer(this);
-                                        resetControls();
+            $('#imageUpload').on('change', function(event) {
+                clearCircles();
+                const file = event.target.files[0];
+                if (file) {
+                    if (file.type === 'application/pdf') {
+                        const fileReader = new FileReader();
+                        fileReader.onload = function() {
+                            const typedarray = new Uint8Array(this.result);
+                            pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+                                pdf.getPage(1).then(page => {
+                                    const scale = 2;
+                                    const viewport = page.getViewport({ scale: scale });
+                                    const canvas = document.createElement('canvas');
+                                    const context = canvas.getContext('2d');
+                                    canvas.height = viewport.height;
+                                    canvas.width = viewport.width;
+                                    const renderContext = {
+                                        canvasContext: context,
+                                        viewport: viewport
+                                    };
+                                    page.render(renderContext).promise.then(() => {
+                                        const imgURL = canvas.toDataURL();
+                                        $('#uploadedImage').attr('src', imgURL).on('load', function() {
+                                            originalImageWidth = this.naturalWidth;
+                                            originalImageHeight = this.naturalHeight;
+                                            fitImageToContainer(this);
+                                            resetControls();
+                                        });
                                     });
                                 });
                             });
-                        });
-                    };
-                    fileReader.readAsArrayBuffer(file);
-                } else {
-                    const imgURL = URL.createObjectURL(file);
-                    $('#uploadedImage').attr('src', imgURL).on('load', function() {
-                        originalImageWidth = img.width;  // Store original image dimensions
-                        originalImageHeight = img.height;
-                        fitImageToContainer(this);
-                        resetControls();
-                    });
-                }
-            }
-        });
-
-        $(document).on('paste', function(event) {
-            const items = event.originalEvent.clipboardData.items;
-            for (let item of items) {
-                if (item.type.startsWith('image/')) {
-                    const file = item.getAsFile();
-                    if (file) {
-                        clearCircles(); // Clear existing circles on paste
+                        };
+                        fileReader.readAsArrayBuffer(file);
+                    } else {
                         const imgURL = URL.createObjectURL(file);
                         $('#uploadedImage').attr('src', imgURL).on('load', function() {
-                            originalImageWidth = img.width;  // Store original image dimensions
-                            originalImageHeight = img.height;
+                            originalImageWidth = this.naturalWidth;
+                            originalImageHeight = this.naturalHeight;
                             fitImageToContainer(this);
                             resetControls();
                         });
                     }
                 }
-            }
-        });
-
-        function fitImageToContainer(image) {
-            const maxWidth = 1280;
-            const maxHeight = 960;
-            const ratio = Math.min(maxWidth / image.width, maxHeight / image.height);
-            $(image).css({
-                width: `${image.width * ratio}px`,
-                height: `${image.height * ratio}px`
             });
-        }
 
-        function resetControls() {
-            $('#horizontalTrackbar').val(0);
-            $('#verticalTrackbar').val(0);
+            $(document).on('paste', function(event) {
+                const items = event.originalEvent.clipboardData.items;
+                for (let item of items) {
+                    if (item.type.startsWith('image/')) {
+                        const file = item.getAsFile();
+                        if (file) {
+                            clearCircles();
+                            const imgURL = URL.createObjectURL(file);
+                            $('#uploadedImage').attr('src', imgURL).on('load', function() {
+                                originalImageWidth = this.naturalWidth;
+                                originalImageHeight = this.naturalHeight;
+                                fitImageToContainer(this);
+                                resetControls();
+                            });
+                        }
+                    }
+                }
+            });
+
+            function fitImageToContainer(image) {
+                const maxWidth = $('#imageContainer').width();
+                const maxHeight = $('#imageContainer').height();
+                const ratio = Math.min(maxWidth / image.naturalWidth, maxHeight / image.naturalHeight);
+                $(image).css({
+                    width: `${image.naturalWidth * ratio}px`,
+                    height: `${image.naturalHeight * ratio}px`
+                });
+          
+            }
+
+            function resetControls() {
+                $('#horizontalTrackbar').val(0);
+                $('#verticalTrackbar').val(0);
+                updateTransform();
+            }
+
+            $('#uploadedImage').on('click', function(e) {
+                const rect = $(this)[0].getBoundingClientRect();
+                const X = (e.clientX - rect.left) / zoomLevel;
+                const Y = (e.clientY - rect.top) / zoomLevel;
+                addNumberedCircle(X, Y);
+            });
+
+            function addNumberedCircle(x, y) {
+                const circleSize = $('#circleSizeInput').val();
+                const fontSize = $('#fontSizeInput').val();
+                const borderThickness = $('#borderThicknessInput').val();
+                const circle = $('<div class="numbered-circle"></div>').css({
+                    width: `${circleSize}px`,
+                    height: `${circleSize}px`,
+                    borderColor: $('#circleColor').val(),
+                    borderWidth: `${borderThickness}px`,
+                    borderStyle: 'solid',
+                    fontSize: `${fontSize}px`,
+                    color: $('#fontColor').val(),
+                    left: `${x}px`,
+                    top: `${y}px`,
+                    transform: `scale(${zoomLevel})`,
+                    opacity: 0
+                }).text(counter);
+                circle.data({
+                    size: circleSize,
+                    fontSize: fontSize,
+                    borderThickness: borderThickness,
+                    borderColor: $('#circleColor').val(),
+                    fontColor: $('#fontColor').val(),
+                    x: x,
+                    y: y
+                });
+                $('#imageContainer').append(circle);
+                circle.animate({ opacity: 1 }, 300);
+                circles.push(circle);
+                counter++;
+                circle.on('mousedown', function(e) {
+                    isDragging = true;
+                    dragCircle = $(this);
+                    offset.x = e.clientX - parseFloat(dragCircle.css('left'));
+                    offset.y = e.clientY - parseFloat(dragCircle.css('top'));
+                    e.preventDefault();
+                });
+            }
+
+            $(document).on('mousemove', function(e) {
+                if (isDragging && dragCircle) {
+                    const newX = e.clientX - offset.x;
+                    const newY = e.clientY - offset.y;
+                    dragCircle.css({
+                        left: `${newX}px`,
+                        top: `${newY}px`
+                    });
+                }
+            });
+
+            $(document).on('mouseup', function() {
+                isDragging = false;
+                dragCircle = null;
+            });
+
+            $('#horizontalTrackbar, #verticalTrackbar').on('input', updateTransform);
+
+            $('#clearCircles').on('click', function() {
+                clearCircles();
+            });
+
+            function clearCircles() {
+                circles.forEach(circle => circle.remove());
+                circles = [];
+                counter = parseInt($('#startNumberInput').val(), 10);
+            }
+
+            $('#downloadImage').on('click', function() {
+                downloadAnnotatedImage();
+            });
+
+            $('#startNumberInput').on('change', function() {
+                counter = parseInt($(this).val(), 10);
+            });
+
+            $(document).on('keydown', function(event) {
+                if (event.ctrlKey && event.key === 'z') {
+                    undoLastCircle();
+                }
+            });
+
+            function undoLastCircle() {
+                if (circles.length > 0) {
+                    circles.pop().remove();
+                    counter--;
+                }
+            }
+
+            $('#imageWrapper').on('wheel', function(event) {
+                if (event.ctrlKey) {
+                    event.preventDefault();
+                    if (event.originalEvent.deltaY < 0) {
+                        zoomIn();
+                    } else {
+                        zoomOut();
+                    }
+                }
+            });
+
+            function zoomIn() {
+            zoomLevel += 0.1; 
             updateTransform();
-        }
+            }
 
-        // Create new numbered circles on image click
-        $('#uploadedImage').on('click', function(e) {
-    const rect = $(this)[0].getBoundingClientRect(); // Get the image's position and size
-    const offsetX = e.clientX - rect.left; // Mouse X position relative to the image
-    const offsetY = e.clientY - rect.top;  // Mouse Y position relative to the image
-    const x = offsetX / zoomLevel; // Adjust for zoom
-    const y = offsetY / zoomLevel; // Adjust for zoom
-    const circleSize = parseFloat($('#circleSizeInput').val());
+            function zoomOut() {
+            zoomLevel = Math.max(1, zoomLevel - 0.1); 
+            updateTransform();
+            }
 
-// Center the circle at the cursor tip
-addNumberedCircle(x - circleSize / 2, y - circleSize / 2);});
+            function updateTransform() {
+    const horizontal = $('#horizontalTrackbar').val();
+    const vertical = $('#verticalTrackbar').val();
 
 
-function addNumberedCircle(x, y) {
-    const circleSize = $('#circleSizeInput').val();
-    const fontSize = $('#fontSizeInput').val();
-    const borderThickness = $('#borderThicknessInput').val();
-
-    const circle = $('<div class="numbered-circle"></div>').css({
-        width: `${circleSize}px`,
-        height: `${circleSize}px`,
-        borderColor: $('#circleColor').val(),
-        borderWidth: `${borderThickness}px`,
-        borderStyle: 'solid',
-        fontSize: `${fontSize}px`,
-        color: $('#fontColor').val(),
-        left: `${x - circleSize / 2}px`,
-        top: `${y - circleSize / 2}px`,
-        position: 'absolute',
-        opacity: 0 // Start invisible
-    }).text(counter); // Use current counter
-
-    // Store additional properties in data attributes
-    circle.data({
-        size: circleSize,
-        fontSize: fontSize,
-        borderThickness: borderThickness,
-        borderColor: $('#circleColor').val(),
-        fontColor: $('#fontColor').val(),
+    // Apply translation and scaling
+    $('#imageContainer').css({
+        transform: `scale(${zoomLevel}) translate(${horizontal}px, ${vertical}px)`
     });
 
-    $('#imageContainer').append(circle);
-    circle.animate({ opacity: 1 }, 300); // Fade in effect
-    circles.push(circle);
-    counter++; // Increment counter for next circle
-
-    // Add drag functionality
-    circle.on('mousedown', function(e) {
-        isDragging = true;
-        dragCircle = $(this);
-        offset.x = e.clientX - parseFloat(dragCircle.css('left'));
-        offset.y = e.clientY - parseFloat(dragCircle.css('top'));
-        e.preventDefault(); // Prevent text selection
+    // Adjust circle positions
+    circles.forEach(circle => {
+        const x = circle.data('x');
+        const y = circle.data('y');
+        circle.css({
+            left: `${centerX + x * zoomLevel}px`,
+            top: `${centerY + y * zoomLevel}px`,
+            transform: `scale(${1 / zoomLevel})`
+        });
     });
 }
 
-// Add a speed factor
-const speedFactor = 1.000000001; // Adjust this value to change the speed
 
-// Handle mouse movement
-$(document).on('mousemove', function(e) {
-    if (isDragging && dragCircle) {
-        const newX = (e.clientX - offset.x) * speedFactor;
-        const newY = (e.clientY - offset.y) * speedFactor;
-        dragCircle.css({
-            left: `${newX}px`,
-            top: `${newY}px`
-        });
-    }
-});
+            function downloadAnnotatedImage() {
+                const canvas = document.getElementById('canvas');
+                const context = canvas.getContext('2d');
+                const img = document.getElementById('uploadedImage');
 
+                canvas.width = img.naturalWidth || originalImageWidth;
+                canvas.height = img.naturalHeight || originalImageHeight;
 
-        $(document).on('mouseup', function() {
-            isDragging = false;
-            dragCircle = null;
-        });
+                context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-        $('#horizontalTrackbar, #verticalTrackbar').on('input', updateTransform);
+                const xScale = canvas.width / img.width;
+                const yScale = canvas.height / img.height;
 
-        $('#clearCircles').on('click', function() {
-            clearCircles();
-        });
-
-        function clearCircles() {
-            circles.forEach(circle => circle.remove());
-            circles = [];
-            counter = parseInt($('#startNumberInput').val(), 10); // Reset counter
-        }
-
-        $('#downloadImage').on('click', function() {
-            downloadAnnotatedImage();
-        });
-
-        $('#startNumberInput').on('change', function() {
-            counter = parseInt($(this).val(), 10); // Update counter when the starting number changes
-        });
-
-        $(document).on('keydown', function(event) {
-            if (event.ctrlKey && event.key === 'z') {
-                undoLastCircle();
-            }
-        });
-
-        function undoLastCircle() {
-            if (circles.length > 0) {
-                circles.pop().remove(); 
-                counter--; 
-            }
-        }
-
-        $('#imageWrapper').on('wheel', function(event) {
-            if (event.ctrlKey) {
-                event.preventDefault(); 
-                if (event.originalEvent.deltaY < 0) {
-                    zoomIn();
-                } else {
-                    zoomOut();
-                }
-            }
-        });
-
-        function zoomIn() {
-            zoomLevel += 0.1; 
-            updateTransform();
-        }
-
-        function zoomOut() {
-            zoomLevel = Math.max(1, zoomLevel - 0.1); 
-            updateTransform();
-        }
-
-        function updateTransform() {
-            const horizontal = $('#horizontalTrackbar').val();
-            const vertical = $('#verticalTrackbar').val();
-            $('#imageContainer').css({
-                transform: `scale(${zoomLevel}) translate(${horizontal}px, ${vertical}px)`
-            });
-        }
-
-function downloadAnnotatedImage() {
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-    const img = document.getElementById('uploadedImage');
-
-    // Set canvas size to original image size for high quality
-    canvas.width = img.naturalWidth || originalImageWidth;
-    canvas.height = img.naturalHeight || originalImageHeight;
-
-    // Draw the image at its original size
-    context.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    // Get scaling factors
-    const xScale = canvas.width / img.width;
-    const yScale = canvas.height / img.height;
-
-    // Draw each circle annotation using stored properties
-    circles.forEach((circle) => {
-        const circleSize = parseFloat(circle.data('size'));
-        const fontSize = parseFloat(circle.data('fontSize'));
-        const borderThickness = parseFloat(circle.data('borderThickness'));
-        const borderColor = circle.data('borderColor');
-        const fontColor = circle.data('fontColor');
+                circles.forEach((circle) => {
+                    const circleSize = parseFloat(circle.data('size'));
+                    const fontSize = parseFloat(circle.data('fontSize'));
+                    const borderThickness = parseFloat(circle.data('borderThickness'));
+                    const borderColor = circle.data('borderColor');
+                    const fontColor = circle.data('fontColor');
 
         // Calculate circle's position accounting for scaling
         const circleX = (parseFloat(circle.css('left')) + circleSize / 2) * xScale;
         const circleY = (parseFloat(circle.css('top')) + circleSize / 2) * yScale;
 
-        // Draw the circle
-        context.beginPath();
-        context.arc(circleX, circleY, (circleSize / 2) * xScale, 0, Math.PI * 2, false);
-        context.lineWidth = borderThickness * xScale; // Scale border thickness
-        context.strokeStyle = borderColor;
-        context.stroke();
-        context.closePath();
+                    context.beginPath();
+                    context.arc(circleX, circleY, (circleSize / 2) * xScale, 0, Math.PI * 2, false);
+                    context.lineWidth = borderThickness * xScale;
+                    context.strokeStyle = borderColor;
+                    context.stroke();
+                    context.closePath();
 
-        // Draw the text inside the circle
-        context.fillStyle = fontColor;
-        context.font = `bold ${fontSize * xScale}px Arial`; // Scale font size
-        context.textAlign = 'center';
-        context.textBaseline = 'middle';
-        context.fillText(circle.text(), circleX, circleY); // Use circle's text for numbering
-    });
+                    context.fillStyle = fontColor;
+                    context.font = `bold ${fontSize * xScale}px Arial`;
+                    context.textAlign = 'center';
+                    context.textBaseline = 'middle';
+                    context.fillText(circle.text(), circleX, circleY);
+                });
 
-    // Create link to download the image
-    const link = document.createElement('a');
-    link.download = 'annotated_image.png';
-    link.href = canvas.toDataURL('image/png', 1.0); // Ensure maximum quality
-    link.click();
-}
-
-    });
+                const link = document.createElement('a');
+                link.download = 'annotated_image.png';
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            }
+        });
     </script>         
 </body>
 </html>
